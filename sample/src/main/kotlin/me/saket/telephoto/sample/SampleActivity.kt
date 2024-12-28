@@ -28,9 +28,9 @@ import java.util.concurrent.Executor
 class SampleActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    if (BuildConfig.DEBUG) {
-      enableStrictMode()
-    }
+//    if (BuildConfig.DEBUG) {
+//      enableStrictMode()
+//    }
     enableEdgeToEdge()
     setupImmersiveMode()
     super.onCreate(savedInstanceState)

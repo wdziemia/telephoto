@@ -77,7 +77,7 @@ private fun AlbumGrid(
 ) {
   LazyVerticalGrid(
     modifier = modifier,
-    columns = GridCells.Adaptive(minSize = 140.dp),
+    columns = GridCells.Fixed(1),
     contentPadding = PaddingValues(4.dp),
     verticalArrangement = Arrangement.spacedBy(4.dp),
     horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -86,7 +86,7 @@ private fun AlbumGrid(
       Box(
         modifier = Modifier
           .fillMaxWidth()
-          .height(200.dp)
+          .height(300.dp)
           .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
           .clickable { navigator.goTo(MediaViewerScreenKey(album, initialIndex = index)) },
         contentAlignment = Alignment.BottomStart
@@ -96,42 +96,46 @@ private fun AlbumGrid(
         val colorScheme = MaterialTheme.colorScheme
         val captionBackground = remember { Animatable(colorScheme.surface) }
 
-        AsyncImage(
-          modifier = Modifier.fillMaxSize(),
-          model = ImageRequest.Builder(LocalContext.current)
-            .data(item.placeholderImageUrl)
-            .memoryCacheKey(item.placeholderImageUrl)
-            .crossfade(300)
-            .allowHardware(false)
-            .listener(onSuccess = { _, result ->
-              scope.launch {
-                val accent = result.drawable.extractColor()
-                if (accent != null) {
-                  captionBackground.animateTo(accent)
+        ZoomAnywhere(
+          Modifier.matchParentSize()
+        ) {
+          AsyncImage(
+            modifier = Modifier.fillMaxSize(),
+            model = ImageRequest.Builder(LocalContext.current)
+              .data(item.placeholderImageUrl)
+              .memoryCacheKey(item.placeholderImageUrl)
+              .crossfade(300)
+              .allowHardware(false)
+              .listener(onSuccess = { _, result ->
+                scope.launch {
+                  val accent = result.drawable.extractColor()
+                  if (accent != null) {
+                    captionBackground.animateTo(accent)
+                  }
                 }
-              }
-            })
-            .build(),
-          contentDescription = item.caption,
-          contentScale = ContentScale.Crop,
-        )
-        Box(
-          Modifier
-            .matchParentSize()
-            .background(
-              Brush.verticalGradient(
-                0.5f to captionBackground.value.copy(alpha = 0f),
-                1f to captionBackground.value,
-              )
-            )
-        )
-        Text(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-          text = item.caption,
-          color = Color.White
-        )
+              })
+              .build(),
+            contentDescription = item.caption,
+            contentScale = ContentScale.Crop,
+          )
+        }
+//        Box(
+//          Modifier
+//            .matchParentSize()
+//            .background(
+//              Brush.verticalGradient(
+//                0.5f to captionBackground.value.copy(alpha = 0f),
+//                1f to captionBackground.value,
+//              )
+//            )
+//        )
+//        Text(
+//          modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(16.dp),
+//          text = item.caption,
+//          color = Color.White
+//        )
       }
     }
   }

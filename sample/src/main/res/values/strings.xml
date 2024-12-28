@@ -1,3 +1,5 @@
 <resources>
   <string name="app_name">Telephoto</string>
+
+  <item name="overlay_foo" type="id" />
 </resources>
